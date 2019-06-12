@@ -122,5 +122,3 @@ Function.prototype.curry2 = function(numArgs) {
   return _curry2;
 };
 
-// console.log(curry1(2)(6)(8));
-console.log(Function.curry2(2)(6)(8));
