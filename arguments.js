@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable no-else-return */
 /* eslint-disable no-extend-native */
 // sum
@@ -14,7 +15,7 @@ const restSum = (...nums) => {
   });
 };
 
-Function.prototype.myBind = function(context) {
+Function.prototype.myBind1 = function(context) {
   // const args = arguments;
   const fn = this;
   const args = Array.from(arguments).slice(1);
@@ -22,6 +23,12 @@ Function.prototype.myBind = function(context) {
   return function _callFunc() {
     const callArgs = Array.from(arguments);
     return fn.apply(context, args.concat(callArgs));
+  };
+};
+
+Function.prototype.myBind = function(context, ...bindArgs) {
+  return (...callArgs) => {
+    this.apply(context, bindArgs.concat(callArgs));
   };
 };
 
@@ -85,3 +92,35 @@ function curriedSum(numArgs) {
   return _curriedSum;
 }
 console.log(curriedSum(3)(2)(2)(8));
+
+Function.prototype.curry1 = function(numArgs) {
+  const numbers = [];
+  const func = this;
+
+  function _curry1(number) {
+    numbers.push(number);
+    if (numArgs === numbers.length) {
+      return func.apply(null, numbers);
+    } else {
+      return _curry1;
+    }
+  }
+  return _curry1;
+};
+
+Function.prototype.curry2 = function(numArgs) {
+  const numbers = [];
+
+  const _curry2 = number => {
+    numbers.push(number);
+    if (numArgs === numbers.length) {
+      return this(...numbers);
+    } else {
+      return _curry2;
+    }
+  };
+  return _curry2;
+};
+
+// console.log(curry1(2)(6)(8));
+console.log(Function.curry2(2)(6)(8));
